@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+title: >-
+  Prompt-based knowledge acquisition for living sacred heritage:
+  taxonomy, prompt, and extraction outputs
+message: If you use this taxonomy or these outputs, please cite the paper below.
+type: dataset
+authors:
+  - family-names: Pant
+    given-names: Pujan
+    affiliation: Herald College Kathmandu, Naxal, Kathmandu, Nepal
+  - family-names: Newpane
+    given-names: Sagar
+    affiliation: Herald College Kathmandu, Naxal, Kathmandu, Nepal
+  - family-names: Sitaula
+    given-names: Hari
+    affiliation: Montana Technological University, Butte, MT, United States
+  - family-names: Sakhakarmy
+    given-names: Manish
+    affiliation: ASI Industrial, Billings, MT, United States
+license: MIT
+keywords:
+  - knowledge acquisition
+  - domain ontology
+  - large language models
+  - semantic network
+  - aspect-based sentiment analysis
+  - cultural heritage
+preferred-citation:
+  type: article
+  title: >-
+    Prompt-based knowledge acquisition for living sacred heritage: a
+    domain-adaptive entity taxonomy and semantic network from visitor reviews
+  authors:
+    - family-names: Pant
+      given-names: Pujan
+    - family-names: Newpane
+      given-names: Sagar
+    - family-names: Sitaula
+      given-names: Hari
+    - family-names: Sakhakarmy
+      given-names: Manish
+  journal: Data & Knowledge Engineering
+  year: 2026
+  notes: Submitted
