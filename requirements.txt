@@ -1,0 +1,21 @@
+# Extraction pipeline
+openai>=1.30.0
+
+# Data handling
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Traditional NLP baseline (Section 3.2)
+nltk>=3.8.1
+vaderSentiment>=3.3.2
+
+# Network construction and analysis (Section 3.4)
+networkx>=3.1
+python-louvain>=0.16
+
+# Figures
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Notebook
+jupyter>=1.0.0

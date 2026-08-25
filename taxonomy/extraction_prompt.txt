@@ -1,0 +1,47 @@
+# LLM-SC extraction prompt — sacred heritage entity extraction
+# Model snapshot: gpt-4o-2026-05-28 | temperature = 0.1 | max_tokens = 1200
+# Reproduced verbatim from Appendix A of the manuscript.
+# ---------------------------------------------------------------
+
+You are analyzing tourist reviews of Pashupatinath Temple, Kathmandu — a living UNESCO sacred heritage site.
+Extract entities, relationships, and aspect-level sentiments. Output STRICT JSON only — no preamble, no explanation, no markdown fences.
+ 
+ENTITY TYPES (use exactly these labels):
+"scenic_spot" : Physical heritage structures, architectural features, monuments, carvings, pagodas, spires, courtyards
+"problem" : Complaints, negative experiences, management failures, pollution, aggression, poor facilities
+"facility_service" : Staff behavior, ticketing, guides, restrooms, food stalls, signage, parking, entry process
+"general_sentiment" : Overall emotional tone not tied to any specific aspect
+"ritual" : Religious ceremonies and acts: aarti, puja, cremation ceremony, darshan, parikrama, tarpan, abhishek, havan
+"religious_actor" : Specific people in religious roles: sadhu, priest, pujari, pilgrim, devotee, monk, yogi — NOT generic tourists
+"sacred_space" : Religiously significant locations: ghat, Bagmati River, inner sanctum, cremation ground, lingam shrine, pagoda roof
+"spiritual_emotion" : Deep internal emotional/spiritual states explicitly felt by the reviewer: awe, transcendence, devotion, reverence, peace, grief, humility, being moved, overwhelmed, blessed, spiritual connection, sacred feeling, sense of mortality — MUST be felt by the reviewer, not just described
+"festival_event" : Named religious events: Maha Shivaratri, Teej festival, Bala Chaturdashi, evening aarati ceremony
+"cultural_rule" : Access norms and restrictions: non-Hindu entry ban, dress code requirement, no photography zones, entry fee for foreigners
+"sacred_object" : Religiously significant physical items: prasad, Shiva lingam, incense sticks, flower offerings, trident (trishul), marigold garlands, diya lamp, rudraksha
+"dual_valence" : An experience the reviewer describes with SIMULTANEOUS positive AND negative emotion — grief AND awe together, beautiful AND sad, moving AND disturbing IN THE SAME SENTENCE about the SAME thing
+ 
+RELATIONSHIP TYPES: co_occurrence | causal | description | contrast
+SENTIMENT ASPECTS: service | facility | environment | ritual_experience | spiritual_authenticity | access_fairness | sacred_atmosphere | crowd_management | cultural_sensitivity
+ 
+CRITICAL RULES — read carefully:
+1. DO NOT extract "Pashupatinath Temple", "the temple", "Kathmandu", "Nepal", "India" as entities — these are the review subject, not extractable entities
+2. DO NOT extract generic nouns ("place", "site", "visit", "experience") as entities
+3. spiritual_emotion MUST be an emotion the REVIEWER personally felt — phrases like "I was moved", "I felt awe", "overwhelmed with emotions", "sense of peace", "humbled", "deeply spiritual moment", "moved to tears" -> ALL are spiritual_emotion. Extract the emotion name as the entity ("awe", "sense of peace", "overwhelmed emotions"). Also classify as spiritual_emotion: 'other worldly fascination', 'exquisite cultural experience', 'strangely changed', 'sense of mortality' — these are reviewer-felt internal states.
+4. dual_valence — STRICT definition with examples:
+CORRECT: "watching the cremation was both heartbreaking and transcendent" -> dual_valence entity = "cremation ceremony"
+CORRECT: "the funeral pyres were deeply sad yet strangely beautiful" -> dual_valence entity = "funeral pyres"
+INCORRECT: "dead bodies" alone -> NOT dual_valence, just sacred_space or ritual
+INCORRECT: "monkeys", "crowd", "smoke" -> NOT dual_valence
+INCORRECT: anything that is only negative or only positive -> NOT dual_valence
+Only use dual_valence if the reviewer explicitly expresses BOTH a positive feeling AND a negative feeling about the EXACT same thing
+5. Sentiment scores — use the FULL range:
+0.0–0.2 = strongly negative ("terrible", "disgusting", "ruined")
+0.3–0.4 = mildly negative ("disappointing", "could be better")
+0.6–0.7 = mildly positive ("nice", "worth visiting", "good")
+0.8–0.9 = strongly positive ("amazing", "life-changing", "beautiful")
+1.0 = superlative ("best experience of my life", "absolutely perfect")
+NEVER use exactly 0.5 unless the text contains genuinely equal positive and negative evidence for that specific aspect. NEVER use 0.0 unless the text is explicitly hateful or disgusted.
+6. "sacred_atmosphere" and "spiritual_authenticity" are ASPECT labels for sentiment analysis — they are NOT entity types. If you want to extract an entity about the sacred feeling or authenticity of a place, use "spiritual_emotion" instead.
+7. sentiment value in aspect_sentiments MUST be exactly one of: "positive", "neutral", or "negative" — no other values, no qualifiers like "mildly negative".
+8. Extract ALL entities present — be thorough — minimum 4 entities per review
+9. Return ONLY valid JSON — no markdown, no backticks, no extra text
